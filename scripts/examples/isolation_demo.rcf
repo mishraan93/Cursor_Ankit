@@ -1,0 +1,23 @@
+# Trimmed routing constraints file. Coordinates are chosen so that the last
+# signal deliberately routes through secured region "secure_a", which the
+# checker must report as a failure.
+
+signal_name = crypto_core:u_crypto|state[0] {
+	LOCAL_LINE:X12Y12S0I3;
+	LOCAL_INTERCONNECT:X12Y13S0I7;
+	dest = (crypto_core:u_crypto|round_r, DATAC), route_port = DATAC;
+}
+
+signal_name = crypto_core:u_crypto|done {
+	LOCAL_LINE:X16Y13S0I2;
+	R4:X20Y13S0I11;
+	R4:X24Y13S0I11;
+	LOCAL_INTERCONNECT:X31Y13S0I4;
+	dest = (monitor:u_monitor|done_r, DATAA), route_port = DATAA;
+}
+
+signal_name = glue_logic:u_glue|cnt[3] {
+	R4:X13Y11S0I9;
+	LOCAL_INTERCONNECT:X40Y30S0I1;
+	dest = (glue_logic:u_glue|cnt_r[3], DATAB), route_port = DATAB;
+}

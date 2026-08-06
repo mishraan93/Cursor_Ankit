@@ -1,1 +1,20 @@
 # Cursor_Ankit
+
+## Isolated module routing checks
+
+Command-line checks for whether any routing shows up in or across an isolated
+(secured) region, for use when the Chip Planner routing display is not
+available. See [docs/isolated-module-routing-check.md](docs/isolated-module-routing-check.md).
+
+| File | Purpose |
+|---|---|
+| `scripts/check_isolated_routing.py` | compares back-annotated routing against the secured region window and fails on any crossing |
+| `scripts/back_annotate_routing.tcl` | writes the routing constraints file the check reads |
+| `scripts/dump_isolated_nodes.tcl` | dumps node placements as CSV to cross-check what sits inside the region |
+| `scripts/examples/` | sample settings and routing files, containing one deliberate violation |
+
+```bash
+python3 scripts/check_isolated_routing.py \
+    --qsf scripts/examples/isolation_demo.qsf \
+    --rcf scripts/examples/isolation_demo.rcf
+```
