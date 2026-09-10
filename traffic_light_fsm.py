@@ -102,7 +102,7 @@ class TrafficLightFSM:
             if self._elapsed < duration:
                 break
             self._elapsed -= duration
-            self.handle_event(Event.TIMER_EXPIRED)
+            self._transition(self._next_timed_state(self.state), reset_elapsed=False)
 
         return self.state
 
@@ -124,9 +124,10 @@ class TrafficLightFSM:
         self._fault_cleared = False
         self._fault_red_on = True
 
-    def _transition(self, next_state: State) -> None:
+    def _transition(self, next_state: State, reset_elapsed: bool = True) -> None:
         self.state = next_state
-        self._elapsed = 0.0
+        if reset_elapsed:
+            self._elapsed = 0.0
         if next_state != State.FAULT:
             self._fault_cleared = False
             self._fault_red_on = True
@@ -145,3 +146,12 @@ class TrafficLightFSM:
         while self._elapsed >= interval:
             self._elapsed -= interval
             self._fault_red_on = not self._fault_red_on
+
+    def _next_timed_state(self, state: State) -> State:
+        if state == State.RED:
+            return State.GREEN
+        if state == State.GREEN:
+            return State.YELLOW
+        if state == State.YELLOW:
+            return State.RED
+        raise ValueError(f"State {state.name} does not have a timed transition")
