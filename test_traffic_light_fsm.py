@@ -41,7 +41,7 @@ class TrafficLightFSMTests(unittest.TestCase):
 
     def test_large_advance_can_cross_multiple_states(self) -> None:
         self.fsm.handle_event(Event.POWER_ON)
-        self.fsm.advance(11.0)
+        self.fsm.advance(10.0)
 
         self.assertEqual(self.fsm.state, State.YELLOW)
 
