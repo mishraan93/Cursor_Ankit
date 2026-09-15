@@ -29,7 +29,8 @@ exclusive routing.
 
 ## Files
 
-- `top.sv` — synthesizable design containing the two module hierarchies.
+- `top.v` — synthesizable Verilog-2001 design containing the two module
+  hierarchies.
 - `regions.qsf.template` — portable assignment template. Device coordinates
   are placeholders because legal resource coordinates depend on the selected
   FPGA.
@@ -37,7 +38,7 @@ exclusive routing.
 ## Preconditions
 
 1. Quartus Prime Pro with a device that supports Logic Lock routing regions.
-2. A new project with `top` as the top-level entity and `top.sv` included.
+2. A new project with `top` as the top-level entity and `top.v` included.
 3. Complete Analysis & Synthesis before assigning hierarchy members.
 4. Select coordinates containing only legal core resources. Keep each module
    region large enough for its logic.

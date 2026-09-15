@@ -24,4 +24,4 @@ python3 scripts/check_isolated_routing.py \
 [`tests/quartus/fence_region/TC-FENCE-001.md`](tests/quartus/fence_region/TC-FENCE-001.md)
 defines a manual Quartus Prime Pro test for an unassigned, zero-expansion
 fence enclosing isolated and non-isolated module regions. It includes
-synthesizable RTL and a portable `.qsf` assignment template.
+synthesizable Verilog-2001 RTL and a portable `.qsf` assignment template.
