@@ -8,7 +8,7 @@ available. See [docs/isolated-module-routing-check.md](docs/isolated-module-rout
 
 | File | Purpose |
 |---|---|
-| `scripts/check_isolated_routing.py` | compares back-annotated routing against the secured region window and fails on any crossing |
+| `scripts/check_isolated_routing.py` | performs a supplemental coordinate-level audit of back-annotated routing; the Fitter Security Report remains authoritative |
 | `scripts/back_annotate_routing.tcl` | writes the routing constraints file the check reads |
 | `scripts/dump_isolated_nodes.tcl` | dumps node placements as CSV to cross-check what sits inside the region |
 | `scripts/examples/` | sample settings and routing files, containing one deliberate violation |

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that no routing enters, leaves or crosses an isolated (secured) region.
+"""Audit routing coordinates around an isolated (secured) region.
 
 The check is text based: it reads the LogicLock/security assignments from the
 Quartus Settings File and the back-annotated routing from the Routing
@@ -13,8 +13,12 @@ Then:
 
     python3 scripts/check_isolated_routing.py --qsf <project>.qsf --rcf <revision>.rcf
 
-Exit status is 0 when every secured region is clean and 1 when a violation is
-found, so the check can be dropped into a regression script.
+This is a supplemental check, not a replacement for Quartus's Fitter Security
+Report. An R4/C4/etc. coordinate identifies a routing-resource anchor and does
+not fully describe the wire's span on every device family.
+
+Exit status is 0 when no coordinate-level conflict is detected, 1 when a
+conflict is found, and 2 when the inputs cannot establish a valid check.
 """
 
 from __future__ import annotations
@@ -229,7 +233,7 @@ def check(
 
     secured = [r for r in regions.values() if r.is_secured]
     if not secured:
-        notes.append(
+        violations.append(
             "No secured LogicLock region found in the .qsf "
             "(expected LL_REGION_SECURITY_LEVEL on at least one region)."
         )
@@ -308,6 +312,13 @@ def main() -> int:
 
     regions = parse_qsf(args.qsf)
     elements = parse_rcf(args.rcf)
+    if not elements:
+        print(
+            "error: no routing elements were parsed from the .rcf; "
+            "cannot establish isolation",
+            file=sys.stderr,
+        )
+        return 2
     violations, notes = check(regions, elements, args.fence)
 
     print(f"regions:          {len(regions)}")
@@ -326,7 +337,8 @@ def main() -> int:
             print(f"  {violation}")
         return 1
 
-    print("\nPASS: no routing crosses an isolated region boundary")
+    print("\nPASS: no coordinate-level routing conflict detected")
+    print("Authoritative result: confirm the Quartus Fitter Security Report has no violations.")
     return 0
 
 

@@ -6,7 +6,7 @@ families, and several routing layers only exist in Quartus Prime Standard
 Edition. These methods answer the same question — *does any routing show up in
 or across the isolated module?* — from reports and files instead.
 
-## Method 1: Fitter Security Report (fastest, no scripting)
+## Method 1: Fitter Security Report (authoritative)
 
 When a design compiles with secured regions, the Fitter writes a Security
 Report into `Compilation Report > Fitter`, and the same tables land in
@@ -21,16 +21,17 @@ Report into `Compilation Report > Fitter`, and the same tables land in
 
 Read it as: any signal crossing the boundary must appear in the inputs/outputs
 panel *and* be carried by a security routing interface. Anything else is a
-route that should not be there. If the panels are missing altogether, the
-separation constraints were not applied, which is also why the Chip Planner had
-nothing to draw.
+route that should not be there. Also review Fitter messages for `fencing`,
+`Security Routing Interface`, and `secured region` errors. If the panels are
+missing altogether, the separation constraints were not applied, which is also
+why the Chip Planner had nothing to draw.
 
 ```bash
 grep -n -A40 "Secured LogicLock Region Summary" <revision>.fit.rpt
 grep -n -A40 "Security Routing Interfaces"      <revision>.fit.rpt
 ```
 
-## Method 2: back-annotated routing file (definitive, scriptable)
+## Method 2: back-annotated routing file (supplemental, scriptable)
 
 The `.rcf` is the text form of the routing the Chip Planner would draw. Each
 entry names a signal and lists the routing elements it uses with their device
@@ -65,7 +66,11 @@ assignments (`LL_ORIGIN`, `LL_WIDTH`, `LL_HEIGHT`,
 - routing inside the fence that surrounds the isolated region,
 - routing that leaves the isolated region without a security routing interface.
 
-It exits non-zero on failure, so it can run in a regression script. Try it on
+This coordinate check is deliberately supplemental: coordinates such as
+`R4:X20Y13...` identify routing-resource anchors, but the physical span and
+direction of each resource are device-family-specific. Therefore, a PASS does
+not supersede the Fitter Security Report. The script exits non-zero on a
+detected conflict or invalid input, so it can run in a regression script. Try it on
 the bundled example, which contains one deliberate violation:
 
 ```bash
