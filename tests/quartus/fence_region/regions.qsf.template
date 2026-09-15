@@ -1,0 +1,31 @@
+# Quartus Prime Pro region-assignment template.
+#
+# Replace each coordinate box with valid resource coordinates for the selected
+# device. A routing-region expansion of zero is represented by making
+# ROUTE_REGION exactly equal to PLACE_REGION.
+#
+# Isolated module:
+#   exclusive placement = RESERVE_PLACE_REGION ON
+#   bounded routing      = ROUTE_REGION
+set_instance_assignment -name PLACE_REGION "<ISO_X1> <ISO_Y1> <ISO_X2> <ISO_Y2>" -to u_isolated
+set_instance_assignment -name RESERVE_PLACE_REGION ON -to u_isolated
+set_instance_assignment -name CORE_ONLY_PLACE_REGION ON -to u_isolated
+set_instance_assignment -name ROUTE_REGION "<ISO_X1> <ISO_Y1> <ISO_X2> <ISO_Y2>" -to u_isolated
+
+# Non-isolated module:
+#   non-exclusive placement = no RESERVE_PLACE_REGION assignment
+#   bounded routing         = ROUTE_REGION
+set_instance_assignment -name PLACE_REGION "<NONISO_X1> <NONISO_Y1> <NONISO_X2> <NONISO_Y2>" -to u_non_isolated
+set_instance_assignment -name CORE_ONLY_PLACE_REGION ON -to u_non_isolated
+set_instance_assignment -name ROUTE_REGION "<NONISO_X1> <NONISO_Y1> <NONISO_X2> <NONISO_Y2>" -to u_non_isolated
+
+# Quartus Prime Pro does not expose RESERVE_ROUTE_REGION or an "exclusive"
+# ROUTE_REGION property. ROUTE_REGION bounds a hierarchy's routing; routing
+# exclusivity must be established by successful Fitter checks and routing
+# inspection.
+#
+# The requested fence has no associated design hierarchy, so it cannot be
+# represented by the instance assignments above. Create it as an unassigned
+# region in Chip Planner as described in TC-FENCE-001.md. Do not add a dummy
+# RTL instance: that would violate the "no associated design hierarchy"
+# requirement.

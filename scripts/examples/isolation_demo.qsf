@@ -1,0 +1,25 @@
+# Trimmed settings file showing the assignments the checker reads:
+# two secured regions and one security routing interface between them.
+
+set_global_assignment -name FAMILY "Cyclone III LS"
+set_global_assignment -name TOP_LEVEL_ENTITY top
+
+set_global_assignment -name LL_ORIGIN X10_Y10 -section_id secure_a
+set_global_assignment -name LL_WIDTH 8 -section_id secure_a
+set_global_assignment -name LL_HEIGHT 8 -section_id secure_a
+set_global_assignment -name LL_STATE LOCKED -section_id secure_a
+set_global_assignment -name LL_REGION_SECURITY_LEVEL 3 -section_id secure_a
+set_instance_assignment -name LL_MEMBER_OF secure_a -to "crypto_core:u_crypto" -section_id secure_a
+
+set_global_assignment -name LL_ORIGIN X30_Y10 -section_id secure_b
+set_global_assignment -name LL_WIDTH 8 -section_id secure_b
+set_global_assignment -name LL_HEIGHT 8 -section_id secure_b
+set_global_assignment -name LL_STATE LOCKED -section_id secure_b
+set_global_assignment -name LL_REGION_SECURITY_LEVEL 3 -section_id secure_b
+set_instance_assignment -name LL_MEMBER_OF secure_b -to "monitor:u_monitor" -section_id secure_b
+
+set_global_assignment -name LL_ORIGIN X19_Y10 -section_id sri_a_b
+set_global_assignment -name LL_WIDTH 10 -section_id sri_a_b
+set_global_assignment -name LL_HEIGHT 8 -section_id sri_a_b
+set_global_assignment -name LL_SECURITY_ROUTING_INTERFACE ON -section_id sri_a_b
+set_instance_assignment -name LL_MEMBER_OF_SECURITY_ROUTING_INTERFACE sri_a_b -to "crypto_core:u_crypto|done" -section_id sri_a_b
